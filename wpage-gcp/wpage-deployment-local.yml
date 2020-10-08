@@ -1,0 +1,33 @@
+# aqui se deploya nginx tomando el index del volumen
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wpage
+
+spec:
+
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: wpage
+
+  template:
+    metadata:
+      labels:
+        app: wpage
+    spec:
+    
+      containers:
+      - name: wpage
+        image: nginx:latest 
+        ports:
+        - containerPort: 80
+          name: wpage
+        volumeMounts:
+        - name: wwwdata
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: wwwdata
+        persistentVolumeClaim:
+          claimName: nginx-pvc

@@ -1,0 +1,27 @@
+#LocalStorage
+# https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+
+---
+# Que es lo que quiero?
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-pvc
+spec:
+  storageClassName: cloud-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Mi
+
+
+---
+# Como quiero que se implemente?
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: cloud-storage
+provisioner: kubernetes.io/gce-pd
+parameters:
+   type: pd-standard

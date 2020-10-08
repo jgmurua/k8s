@@ -1,0 +1,8 @@
+#daemon monitoreo
+
+kubectl apply -f ./monitoreo
+kubectl get all --namespace monitoring
+
+#app GCP
+kubectl apply -f ./wpage-gcp
+kubectl get all 
