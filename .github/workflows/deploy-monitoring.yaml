@@ -1,0 +1,25 @@
+name: Deploy to Kubernetes
+
+jobs:
+  deploy:
+    name: Deploy Monitoring to Kubernetes
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create kubeconfig
+      run: |
+        mkdir ${HOME}/.kube
+        echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+        cat ${HOME}/.kube/config
+    - name: Use context
+      run: kubectl config use-context k0s-cluster
+    - name: Deploy Monitoring
+      run: |
+        helm repo add grafana https://grafana.github.io/helm-charts
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm repo update
+        kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+        helm upgrade --install prometheus prometheus-community/prometheus --namespace monitoring
+        helm upgrade --install loki grafana/loki-stack --namespace monitoring
+        helm upgrade --install grafana grafana/grafana --namespace monitoring -f datasource.yaml
