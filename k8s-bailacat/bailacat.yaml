@@ -22,3 +22,18 @@ spec:
         resources:
           limits:
             memory: "64Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bailacat-service
+  labels:
+    app: bailacat
+spec:
+  type: NodePort
+  selector:
+    app: bailacat
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
