@@ -1,9 +1,0 @@
-kubectl apply -f .
-
-kubectl get pods --namespace=monitoring
-minikube ip #me dice el ip al cual consultar
-kubectl get services/grafana -o go-template='{{(index .spec.ports 0).nodePort}}' --namespace=monitoring   #indica el puerto de el servicio grafana
-
-
-kubectl delete all --namespace=monitoring --all
-
