@@ -19,4 +19,4 @@ jobs:
     - name: Use context
       run: kubectl config use-context k0s-cluster
     - name: Deploy to K8s
-      run: kubectl apply -f k8s/k8s-bailacat/
+      run: kubectl apply -f k8s-bailacat/
