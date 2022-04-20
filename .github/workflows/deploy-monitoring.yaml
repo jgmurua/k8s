@@ -1,5 +1,11 @@
 name: Deploy to Kubernetes
 
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'monitoring version'  
+
 jobs:
   deploy:
     name: Deploy Monitoring to Kubernetes
