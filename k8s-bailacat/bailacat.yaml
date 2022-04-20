@@ -30,10 +30,9 @@ metadata:
   labels:
     app: bailacat
 spec:
-  type: NodePort
   selector:
     app: bailacat
   ports:
-    - protocol: TCP
+    - name: http
       port: 80
-      targetPort: 80
+  type: LoadBalancer
