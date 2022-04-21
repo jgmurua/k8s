@@ -30,7 +30,7 @@ metadata:
   labels:
     app: bailacat
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: bailacat
   ports:
