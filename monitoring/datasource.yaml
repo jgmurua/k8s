@@ -11,3 +11,15 @@ datasources:
       access: proxy
       url: http://loki.monitoring.svc:3100
       access: proxy
+providers:
+  - name: 'a unique provider name'
+    orgId: 1
+    folder: ''
+    folderUid: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 60
+    allowUiUpdates: false
+    options:
+      path: dashboards
+      foldersFromFilesStructure: true
