@@ -2,11 +2,11 @@ datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
-    - name: Prometheus  ## Configure additional grafana datasources (passed through tpl)
+    - name: prometheus  ## Configure additional grafana datasources (passed through tpl)
       type: prometheus  ## ref: http://docs.grafana.org/administration/provisioning/#datasources
       url: http://prometheus-server
       access: proxy
-    - name: Loki
+    - name: loki
       type: loki
       access: proxy
       url: http://loki.monitoring.svc:3100
