@@ -19,7 +19,7 @@ providers:
     type: file
     disableDeletion: false
     updateIntervalSeconds: 60
-    allowUiUpdates: false
+    allowUiUpdates: true
     options:
       path: monitoring/dashboards
       foldersFromFilesStructure: true
