@@ -40,7 +40,7 @@ dashboards:
                 "pluginName": "Loki"
               },
               {
-                "name": "DS_PROMETHEUS",
+                "name": "prometheus",
                 "label": "Prometheus",
                 "description": "",
                 "type": "datasource",
