@@ -28,5 +28,8 @@ dashboardProviders:
 dashboards:
   default:
     loki:
-      gntId: 13359
+        json: |
+          ${indent(8, file("${path.module}/monitoring/dashboards/lokilogsquicksearch.json"))}
+    kubernetes:
+      gntId: 10000
       version: 1
