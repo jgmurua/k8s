@@ -17,7 +17,7 @@ jobs:
       run: |
         mkdir ${HOME}/.kube
         echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
-        cat ${HOME}/.kube/config
+        #cat ${HOME}/.kube/config
     #- name: Use context
       #run: kubectl config use-context k0s-cluster
     - name: Deploy Monitoring
@@ -26,6 +26,22 @@ jobs:
         helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
         helm repo update
         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+        helm upgrade --install prometheus prometheus-community/prometheus --set persistentVolume.enabled=false --namespace monitoring
+        helm upgrade --install loki grafana/loki-stack --namespace monitoring
+        helm upgrade --install grafana grafana/grafana --set persistence.enabled=false --namespace monitoring -f monitoring/datasource.yaml
+    - name: Deploy Service Mesh
+      run: |
+        #https://istio.io/latest/docs/setup/install/helm/
+        helm repo add istio https://istio-release.storage.googleapis.com/charts
+        helm repo update
+        kubectl create namespace istio-system --dry-run=client -o yaml | kubectl apply -f -
+        helm install istio-base istio/base -n istio-system
+        helm install istiod istio/istiod -n istio-system --wait
+        kubectl label namespace istio-ingress istio-injection=enabled
+        helm install istio-ingress istio/gateway -n istio-ingress --wait
+
+        
+        
         helm upgrade --install prometheus prometheus-community/prometheus --set persistentVolume.enabled=false --namespace monitoring
         helm upgrade --install loki grafana/loki-stack --namespace monitoring
         helm upgrade --install grafana grafana/grafana --set persistence.enabled=false --namespace monitoring -f monitoring/datasource.yaml
