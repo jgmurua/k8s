@@ -36,7 +36,7 @@ jobs:
         helm repo update
         kubectl create namespace istio-system --dry-run=client -o yaml | kubectl apply -f -
         kubectl create namespace istio-ingress --dry-run=client -o yaml | kubectl apply -f -
-        helm install istio-base istio/base -n istio-system
-        helm install istiod istio/istiod -n istio-system --wait
+        helm upgrade --install istio-base istio/base -n istio-system
+        helm upgrade --install istiod istio/istiod -n istio-system --wait
         kubectl label namespace istio-ingress istio-injection=enabled
-        helm install istio-ingress istio/gateway -n istio-ingress --wait
+        helm upgrade --install istio-ingress istio/gateway -n istio-ingress --wait
