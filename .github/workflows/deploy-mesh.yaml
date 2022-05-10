@@ -1,0 +1,33 @@
+name: Deploy to Kubernetes
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Mesh version'  
+
+jobs:
+  deploy:
+    name: Deploy Monitoring to Kubernetes
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create kubeconfig
+      run: |
+        mkdir ${HOME}/.kube
+        echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+        #cat ${HOME}/.kube/config
+    #- name: Use context
+      #run: kubectl config use-context k0s-cluster
+    - name: Deploy Service Mesh
+      run: |
+        #https://istio.io/latest/docs/setup/install/helm/
+        helm repo add istio https://istio-release.storage.googleapis.com/charts
+        helm repo update
+        kubectl create namespace istio-system --dry-run=client -o yaml | kubectl apply -f -
+        kubectl create namespace istio-ingress --dry-run=client -o yaml | kubectl apply -f -
+        helm upgrade --install istio-base istio/base -n istio-system
+        helm upgrade --install istiod istio/istiod -n istio-system --wait
+        kubectl label namespace istio-ingress istio-injection=enabled
+        helm upgrade --install istio-ingress istio/gateway -n istio-ingress --wait

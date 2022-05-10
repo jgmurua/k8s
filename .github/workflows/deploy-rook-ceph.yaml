@@ -1,0 +1,30 @@
+name: Deploy to Kubernetes
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Mesh version'  
+
+jobs:
+  deploy:
+    name: Deploy Monitoring to Kubernetes
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create kubeconfig
+      run: |
+        mkdir ${HOME}/.kube
+        echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+        #cat ${HOME}/.kube/config
+    #- name: Use context
+      #run: kubectl config use-context k0s-cluster
+    - name: Deploy Service Mesh
+      run: |
+        helm repo add rook https://charts.rook.io/release
+        kubectl create namespace rook-ceph --dry-run=client -o yaml | kubectl apply -f -
+        helm upgrade --install rook-ceph-operator rook/rook-ceph  --version 1.9.2 --namespace rook-ceph
+        helm upgrade --install rook-ceph-cluster rook/rook-ceph-cluster  --version 1.9.2 --namespace rook-ceph
+        #Change the default StorageClass
+        #https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/
