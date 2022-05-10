@@ -1,4 +1,4 @@
-name: Deploy to Kubernetes
+name: Deploy Rook-Ceph to Kubernetes
 
 on: 
   workflow_dispatch:
@@ -20,7 +20,7 @@ jobs:
         #cat ${HOME}/.kube/config
     #- name: Use context
       #run: kubectl config use-context k0s-cluster
-    - name: Deploy Service Mesh
+    - name: Deploy Rook-Ceph
       run: |
         helm repo add rook https://charts.rook.io/release
         kubectl create namespace rook-ceph --dry-run=client -o yaml | kubectl apply -f -
