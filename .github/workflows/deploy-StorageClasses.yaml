@@ -26,11 +26,11 @@ jobs:
         apiVersion: storage.k8s.io/v1
         kind: StorageClass
         metadata:
-          annotations:
-            description: Esto es un ejemplo de Storage Class
           name: no-provisioner
+          annotations:
+            storageclass.kubernetes.io/is-default-class: "true"
         provisioner: kubernetes.io/no-provisioner
-        reclaimPolicy: Delete
         volumeBindingMode: WaitForFirstConsumer
+        reclaimPolicy: Delete
         EOF
         kubectl apply -f no-provisioner.yaml
