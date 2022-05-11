@@ -1,0 +1,36 @@
+name: Deploy Storage Classes to Kubernetes
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Mesh version'  
+
+jobs:
+  deploy:
+    name: Deploy Monitoring to Kubernetes
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create kubeconfig
+      run: |
+        mkdir ${HOME}/.kube
+        echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+        #cat ${HOME}/.kube/config
+    #- name: Use context
+      #run: kubectl config use-context k0s-cluster
+    - name: Deploy Storage Class no-provisioner
+      run: |
+        cat <<EOF >> no-provisioner.yaml
+        apiVersion: storage.k8s.io/v1
+        kind: StorageClass
+        metadata:
+          annotations:
+            description: Esto es un ejemplo de Storage Class
+          name: no-provisioner
+          provisioner: kubernetes.io/no-provisioner
+          reclaimPolicy: Delete
+          volumeBindingMode: WaitForFirstConsumer
+        EOF
+        kubectl apply -f no-provisioner.yaml
