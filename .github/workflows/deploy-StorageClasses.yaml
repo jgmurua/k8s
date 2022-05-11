@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tags:
-        description: 'Mesh version'  
+        description: 'version'  
 
 jobs:
   deploy:
@@ -29,8 +29,8 @@ jobs:
           annotations:
             description: Esto es un ejemplo de Storage Class
           name: no-provisioner
-          provisioner: kubernetes.io/no-provisioner
-          reclaimPolicy: Delete
-          volumeBindingMode: WaitForFirstConsumer
+        provisioner: kubernetes.io/no-provisioner
+        reclaimPolicy: Delete
+        volumeBindingMode: WaitForFirstConsumer
         EOF
         kubectl apply -f no-provisioner.yaml
