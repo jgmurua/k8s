@@ -8,7 +8,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /grafana
+      - path: /
         pathType: ImplementationSpecific
         backend:
           service:
