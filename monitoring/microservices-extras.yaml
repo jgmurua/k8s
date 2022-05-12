@@ -4,7 +4,6 @@ metadata:
   annotations:
     ingress.kubernetes.io/ssl-redirect: "false"
   name: ingress
-  namespace: default
 spec:
   rules:
   - http:
@@ -650,13 +649,11 @@ data:
 kind: ConfigMap
 metadata:
   name: synthetic-load-generator
-  namespace: default
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: synthetic-load-generator
-  namespace: default
 spec:
   minReadySeconds: 10
   replicas: 1
@@ -694,7 +691,6 @@ metadata:
   labels:
     name: minio
   name: minio
-  namespace: default
 spec:
   ports:
   - port: 9000
@@ -707,7 +703,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: minio
-  namespace: default
 spec:
   minReadySeconds: 10
   replicas: 1
