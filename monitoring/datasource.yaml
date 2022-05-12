@@ -9,13 +9,22 @@ datasources:
     - name: loki
       type: loki
       access: proxy
-      url: http://loki.monitoring.svc:3100
+      url: http://loki.monitoring.svc.cluster.local:3100
       access: proxy
+      jsonData:
+         derivedFields:
+           - datasourceUid: tempo
+             matcherRegex: ((\d+|[a-z]+)(\d+|[a-z]+)(\d+|[a-z]+)(\d+|[a-z]+)(\d+|[a-z]+)(\d+|[a-z]+)(\d+|[a-z]+)(\d+|[a-z]+)(\d+|[a-z]+)(\d+|[a-z]+)(\d+|[a-z]+))
+             name: TraceID
+             url: $${__value.raw}
+         maxLines: 1000
+      version: 1
     - name: tempo
       type: tempo
       access: proxy
-      url: http://tempo
+      url: http://tempo.monitoring.svc.cluster.local:3100
       access: proxy
+      version: 1
       
 dashboardProviders:
  dashboardproviders.yaml:
