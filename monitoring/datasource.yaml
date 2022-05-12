@@ -25,12 +25,12 @@ datasources:
              url: $${__value.raw}
          maxLines: 1000
       version: 1
-    - name: tempo
-      type: tempo
-      access: proxy
-      url: http://tempo.monitoring.svc.cluster.local:3100
-      access: proxy
-      version: 1
+    # - name: tempo
+    #   type: tempo
+    #   access: proxy
+    #   url: http://tempo.monitoring.svc.cluster.local:3100
+    #   access: proxy
+    #   version: 1
       
 dashboardProviders:
  dashboardproviders.yaml:
