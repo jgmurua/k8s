@@ -1,0 +1,28 @@
+name: Deploy Gitlab to Kubernetes
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'version'  
+
+jobs:
+  deploy:
+    name: Deploy Gitlab to Kubernetes
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create kubeconfig
+      run: |
+        mkdir ${HOME}/.kube
+        echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+        #cat ${HOME}/.kube/config
+    #- name: Use context
+      #run: kubectl config use-context k0s-cluster
+    - name: Deploy Gitlab
+      run: |
+        kubectl create namespace gitlab --dry-run=client -o yaml | kubectl apply -f -
+        helm repo add gitlab http://charts.gitlab.io/
+        helm upgrade --install gitlab gitlab/gitlab --version 5.10.2 -f gitlab/values-gitlab.yaml
+        --namespace gitlab
