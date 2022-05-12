@@ -42,4 +42,4 @@ jobs:
         --namespace monitoring
         #grafana
         helm upgrade --install grafana grafana/grafana --set persistence.enabled=false --namespace monitoring -f monitoring/datasource.yaml
-        kubectl create -f monitoring/microservices-extras.yaml -n monitoring
+        kubectl apply -f monitoring/microservices-extras.yaml -n monitoring
