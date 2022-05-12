@@ -34,3 +34,45 @@ jobs:
         reclaimPolicy: Delete
         EOF
         kubectl apply -f no-provisioner.yaml
+        #pvs ejemplo
+        cat <<EOF >> pv-no-provisioner.yaml
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          name: pv-no-provisioner-01
+        spec:
+          storageClassName: no-provisioner
+          capacity:
+            storage: 10Gi
+          accessModes:
+            - ReadWriteOnce
+          hostPath:
+            path: "/tmp/pv1-vol1"
+        ---
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          name: pv-no-provisioner-02
+        spec:
+          storageClassName: no-provisioner
+          capacity:
+            storage: 10Gi
+          accessModes:
+            - ReadWriteOnce
+          hostPath:
+            path: "/tmp/pv1-vol2"
+        ---
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          name: pv-no-provisioner-03
+        spec:
+          storageClassName: no-provisioner
+          capacity:
+            storage: 10Gi
+          accessModes:
+            - ReadWriteOnce
+          hostPath:
+            path: "/tmp/pv1-vol3"
+        EOF
+        kubectl apply -f pv-no-provisioner.yaml

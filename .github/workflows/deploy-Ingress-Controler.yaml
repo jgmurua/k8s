@@ -1,4 +1,4 @@
-name: Deploy Gitlab to Kubernetes
+name: Deploy Ingress-Controler to Kubernetes
 
 on: 
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy Gitlab to Kubernetes
+    name: Deploy Ingress-Controler to Kubernetes
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -20,9 +20,7 @@ jobs:
         #cat ${HOME}/.kube/config
     #- name: Use context
       #run: kubectl config use-context k0s-cluster
-    - name: Deploy Gitlab
+    - name: Deploy Ingress-Controler
       run: |
-        kubectl create namespace gitlab --dry-run=client -o yaml | kubectl apply -f -
-        helm repo add gitlab http://charts.gitlab.io/
-        helm upgrade --install gitlab gitlab/gitlab --version 5.10.2 -f gitlab/values-gitlab.yaml \
-        --namespace gitlab
+        #https://kubernetes.github.io/ingress-nginx/deploy/#bare-metal-clusters
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/baremetal/deploy.yaml
