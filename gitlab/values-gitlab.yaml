@@ -172,7 +172,7 @@ global:
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-minio-settings
   minio:
-    enabled: false
+    enabled: true
     credentials: {}
       # secret:
 
@@ -943,7 +943,7 @@ prometheus:
 ## https://docs.gitlab.com/charts/architecture/decisions#redis
 ## https://docs.gitlab.com/charts/installation/deployment.html#redis
 redis:
-  install: false
+  install: true
   existingSecret: gitlab-redis-secret
   existingSecretKey: redis-password
   usePasswordFile: true
@@ -1051,7 +1051,6 @@ gitlab-runner:
 ## See requirements.yaml for current version
 ## Controlled by `global.grafana.enabled`
 grafana:
-  enabled: false
   ## Override and provide "bogus" administation secrets
   ## gitlab/gitlab-grafana provides overrides via shared-secrets
   nameOverride: grafana-app
