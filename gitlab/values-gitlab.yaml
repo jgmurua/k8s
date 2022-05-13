@@ -24,17 +24,3 @@ prometheus:
 
 gitlab-runner:
   install: true
-
-gitlab:
-  unicorn:
-    minReplicas: 1
-    maxReplicas: 1
-  sidekiq:
-    minReplicas: 1
-    maxReplicas: 1
-  gitlab-shell:
-    minReplicas: 1
-    maxReplicas: 1
-registry:
-  minReplicas: 1
-  maxReplicas: 1
