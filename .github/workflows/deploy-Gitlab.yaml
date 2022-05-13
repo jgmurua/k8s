@@ -27,5 +27,6 @@ jobs:
         helm upgrade --install gitlab gitlab/gitlab --version 5.10.2 -f gitlab/values-gitlab.yaml \
         --set global.initialRootPassword.secret="gitlab-gitlab-initial-root-password" \
         --set global.hosts.domain=gitlabathome777.duckdns.org \
+        --set global.hosts.externalIP=3.14.73.96 \
         --set global.initialRootPassword.key=${{ secrets.GITLABPASS }} \
         --namespace gitlab
