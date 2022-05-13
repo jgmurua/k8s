@@ -25,4 +25,6 @@ jobs:
         kubectl create namespace gitlab --dry-run=client -o yaml | kubectl apply -f -
         helm repo add gitlab http://charts.gitlab.io/
         helm upgrade --install gitlab gitlab/gitlab --version 5.10.2 -f gitlab/values-gitlab.yaml \
+        --set global.initialRootPassword.secret="gitlab-gitlab-initial-root-password" \
+        --set global.initialRootPassword.key=${{ secrets.GITLABPASS }} \
         --namespace gitlab

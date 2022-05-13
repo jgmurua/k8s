@@ -1,12 +1,14 @@
-name: Deploy to Kubernetes
+name: Deploy App into Kubernetes
 
-on:
-  push:
-    branches: [ main ]
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'version'  
 
 jobs:
   deploy:
-    name: Deploy to Kubernetes
+    name: Deploy App
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -15,7 +17,7 @@ jobs:
       run: |
         mkdir ${HOME}/.kube
         echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
-        cat ${HOME}/.kube/config
+        #cat ${HOME}/.kube/config
     #- name: Use context
       #run: kubectl config use-context k0s-cluster
     - name: Deploy to K8s
