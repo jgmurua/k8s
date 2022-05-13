@@ -1,11 +1,6 @@
 # Minimal settings
 global:
   edition: ce
-  ingress:
-    configureCertmanager: false
-    tls:
-      enabled: false
-      secretName: gitlabathome777.duckdns.org
   hosts:
     domain: gitlabathome777.duckdns.org
     https: true
@@ -15,9 +10,6 @@ global:
       https: false
     minio:
       https: false
-# Don't use certmanager, we'll self-sign
-certmanager:
-  install: false
 
 prometheus:
   install: false

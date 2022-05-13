@@ -22,14 +22,10 @@ jobs:
       run: |
         kubectl create namespace gitlab --dry-run=client -o yaml | kubectl apply -f -
         helm repo add gitlab http://charts.gitlab.io/
-        openssl req -x509 -nodes -days 365 \
-        -newkey rsa:2048 -keyout gitlabathome777.duckdns.org.key \
-        -out gitlabathome777.duckdns.org.pem \
-        -subj "/CN=*.gitlabathome777.duckdns.org/O=*.gitlabathome777.duckdns.org"
 
-        kubectl create secret tls gitlabathome777.duckdns.org --key gitlabathome777.duckdns.org.key --cert gitlabathome777.duckdns.org.pem
+
 
         helm upgrade --install gitlab gitlab/gitlab --version 5.10.2 -f gitlab/values-gitlab.yaml \
-        --set global.initialRootPassword.secret="gitlab-gitlab-initial-root-password" \
-        #--set global.initialRootPassword.key=${{ secrets.GITLABPASS }} \
+        --set global.ingress.configureCertmanager=true \
+        --set certmanager-issuer.email="jgmurua@gmail.com" \
         --namespace gitlab
