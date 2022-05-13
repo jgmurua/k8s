@@ -25,7 +25,9 @@ jobs:
 
 
 
-        helm upgrade --install gitlab gitlab/gitlab --version 5.10.2 -f gitlab/values-gitlab.yaml \
-        --set global.ingress.configureCertmanager=true \
+        helm upgrade --install gitlab gitlab/gitlab --version 5.10.2 \
+        --set certmanager-issuer.email="jgmurua@gmail.com" \
+        --set global.hosts.domain=gitlabathome777.duckdns.org \
+        --set global.hosts.externalIP=127.0.0.1 \
         --set certmanager-issuer.email="jgmurua@gmail.com" \
         --namespace gitlab
