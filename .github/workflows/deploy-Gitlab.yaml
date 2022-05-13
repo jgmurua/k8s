@@ -27,7 +27,7 @@ jobs:
         -out gitlabathome777.duckdns.org.pem \
         -subj "/CN=*.gitlabathome777.duckdns.org/O=*.gitlabathome777.duckdns.org"
 
-        kubectl apply secret tls gitlabathome777.duckdns.org --key gitlabathome777.duckdns.org.key --cert gitlabathome777.duckdns.org.pem
+        kubectl create secret tls gitlabathome777.duckdns.org --key gitlabathome777.duckdns.org.key --cert gitlabathome777.duckdns.org.pem
 
         helm upgrade --install gitlab gitlab/gitlab --version 5.10.2 -f gitlab/values-gitlab.yaml \
         --set global.initialRootPassword.secret="gitlab-gitlab-initial-root-password" \
