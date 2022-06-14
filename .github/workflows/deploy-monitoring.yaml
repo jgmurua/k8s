@@ -11,6 +11,11 @@ jobs:
     name: Deploy Monitoring to Kubernetes
     runs-on: ubuntu-latest
     steps:
+    - name: install kubectl
+      uses: azure/setup-kubectl@v2.0
+      with:
+        version: 'v1.23.6' # compatibilidad
+      id: install
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Create kubeconfig
