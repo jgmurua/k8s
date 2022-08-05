@@ -30,10 +30,10 @@ jobs:
         helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
         helm repo update
         kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
-        helm upgrade --install tempo grafana/tempo-distributed -f monitoring/microservices-tempo-values.yaml \
-        --set ingester.persistence.enabled=false \
-        --set querier.persistence.enabled=false \
-        --namespace monitoring
+        #helm upgrade --install tempo grafana/tempo-distributed -f monitoring/microservices-tempo-values.yaml \
+        #--set ingester.persistence.enabled=false \
+        #--set querier.persistence.enabled=false \
+        #--namespace monitoring
         #loki
         helm upgrade --install loki grafana/loki-stack \
         --namespace monitoring
