@@ -1,0 +1,48 @@
+name: Deploy Monitoring to Kubernetes
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'monitoring version'  
+
+jobs:
+  deploy:
+    name: Deploy Monitoring to Kubernetes
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create kubeconfig
+      run: |
+        mkdir ${HOME}/.kube
+        echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+    - name: Deploy Monitoring
+      run: |
+        helm repo add grafana https://grafana.github.io/helm-charts
+        helm repo add bitnami https://charts.bitnami.com/bitnami   
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm repo update
+        kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+        helm upgrade --install tempo grafana/tempo-distributed -f monitoring/microservices-tempo-values.yaml \
+        --set ingester.persistence.enabled=false \
+        --set querier.persistence.enabled=false \
+        --namespace monitoring
+        #loki
+        helm upgrade --install loki grafana/loki-stack \
+        --namespace monitoring
+        #prometheus
+        helm upgrade --install prometheus prometheus-community/prometheus \
+        --set alertmanager.persistentVolume.enabled=false \
+        --set server.persistentVolume.enabled=false \
+        --set pushgateway.persistentVolume.enabled=false \
+        --namespace monitoring
+        #grafana
+        helm upgrade --install grafana grafana/grafana --set persistence.enabled=false --namespace monitoring -f monitoring/datasource.yaml
+        kubectl apply -f monitoring/microservices-extras.yaml -n monitoring
