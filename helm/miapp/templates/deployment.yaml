@@ -1,0 +1,25 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ include "miapp.fullname" . }}-deployment"
+  labels:
+    app: {{ include "miapp.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "miapp.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "miapp.fullname" . }}
+    spec:
+      containers:
+      - name: {{ include "miapp.fullname" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "64Mi"
