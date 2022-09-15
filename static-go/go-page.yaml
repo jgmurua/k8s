@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gopage-deployment
+  labels:
+    app: gopage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gopage
+  template:
+    metadata:
+      labels:
+        app: gopage
+    spec:
+      containers:
+      - name: gopage
+        image: jgmurua/static-go:latest
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            memory: "16Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gopage-service
+  labels:
+    app: gopage
+spec:
+  type: NodePort
+  selector:
+    app: gopage
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 3000
+      nodePort: 30008 #cluster local
