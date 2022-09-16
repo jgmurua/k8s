@@ -46,3 +46,4 @@ jobs:
         #grafana
         helm upgrade --install grafana grafana/grafana --set persistence.enabled=false --namespace monitoring -f monitoring/datasource.yaml
         kubectl apply -f monitoring/microservices-extras.yaml -n monitoring
+        helm upgrade --install grafana/mimir-distributed -f monitoring/valuesMimir.yaml --namespace monitoring
