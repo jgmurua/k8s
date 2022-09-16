@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gingonic-deployment
+  labels:
+    app: gingonic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gingonic
+  template:
+    metadata:
+      labels:
+        app: gingonic
+    spec:
+      containers:
+      - name: gingonic
+        image: jgmurua/gin-gonic-page:latest
+        ports:
+        - containerPort: 3300
+        resources:
+          limits:
+            memory: "8Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gingonic-service
+  labels:
+    app: gingonic
+spec:
+  type: NodePort
+  selector:
+    app: gingonic
+  ports:
+    - protocol: TCP
+      port: 8085
+      targetPort: 3300
+      nodePort: 30009 #cluster local
