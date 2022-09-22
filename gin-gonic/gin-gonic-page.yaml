@@ -18,7 +18,7 @@ spec:
       - name: gin-gonic-page
         image: jgmurua/gin-gonic-page:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 3300
         resources:
           limits:
             memory: "8Mi"
@@ -35,6 +35,6 @@ spec:
     app: gin-gonic-page
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 3300
+      targetPort: 3300
       nodePort: 30008 #cluster local
