@@ -50,10 +50,6 @@ jobs:
           --set pushgateway.persistentVolume.enabled=false \
           --namespace monitoring 
         helm upgrade --install mimir grafana/mimir-distributed -n monitoring -f monitoring-aks/values-mimir.yaml
-        #fix for avoid multiple replicas in multiple zones
-        kubectl delete statefulset mimir-ingester-zone-a --cascade=false -n monitoring
-        kubectl scale statefulset mimir-store-gateway-zone-b --replicas=1 -n monitoring
-        kubectl delete statefulset mimir-ingester-zone-c --cascade=false -n monitoring
         helm upgrade --install loki grafana/loki-stack --namespace monitoring 
         helm upgrade --install tempo grafana/tempo-distributed --namespace monitoring \
           --set compactor.replicas=1 \
@@ -65,4 +61,9 @@ jobs:
           --set querier.replicas=1 \
           --set queryFrontend.replicas=1 
         helm upgrade --install grafana grafana/grafana --namespace monitoring -f monitoring-aks/grafana-datasource.yaml 
-        
+        #fix for avoid multiple replicas in multiple zones
+        kubectl delete statefulset mimir-ingester-zone-a --cascade=false -n monitoring
+        kubectl scale statefulset mimir-store-gateway-zone-b --replicas=1 -n monitoring
+        kubectl delete statefulset mimir-ingester-zone-c --cascade=false -n monitoring
+        kubectl delete pod mimir-ingester-zone-a-0 -n monitoring
+        kubectl delete pod mimir-ingester-zone-c-0 -n monitoring
