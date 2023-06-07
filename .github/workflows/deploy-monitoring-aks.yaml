@@ -67,6 +67,6 @@ jobs:
         kubectl scale statefulset mimir-store-gateway-zone-0 --replicas=0 -n monitoring
         kubectl scale statefulset mimir-ingester-zone-a --replicas=0 -n monitoring
         kubectl scale statefulset mimir-ingester-zone-b --replicas=1 -n monitoring
-        kubectl scale statefulset mimir-ingester-zone-ca --replicas=0 -n monitoring
+        kubectl scale statefulset mimir-ingester-zone-c --replicas=0 -n monitoring
 
         
