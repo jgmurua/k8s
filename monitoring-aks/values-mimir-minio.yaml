@@ -1,0 +1,21 @@
+mimir:
+  structuredConfig:
+    alertmanager_storage:
+      s3:
+        bucket_name: alert
+        access_key_id: ${AWS_ACCESS_KEY_ID}
+        endpoint: minio.monitoring.svc
+        secret_access_key: ${MINIO_SECRET_ACCESS_KEY}
+    blocks_storage:
+      backend: s3
+      s3:
+        bucket_name: blocks
+        access_key_id: ${MINIO_ACCESS_KEY_ID}
+        endpoint: minio.monitoring.svc
+        secret_access_key: ${MINIO_SECRET_ACCESS_KEY}
+    ruler_storage:
+      s3:
+        bucket_name: ruler
+        access_key_id: ${MINIO_ACCESS_KEY_ID}
+        endpoint: minio.monitoring.svc
+        secret_access_key: ${MINIO_SECRET_ACCESS_KEY}

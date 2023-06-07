@@ -1,0 +1,106 @@
+global:
+  extraEnvFrom:
+    - secretRef:
+        name: mimir-bucket-secret
+  podAnnotations:
+    bucketSecretVersion: "0"
+mimir:
+  admin_api:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+  alertmanager:
+    persistentVolume:
+      enabled: true
+    replicas: 1
+    resources:
+      requests:
+        cpu: 30m
+        memory: 64Mi
+    statefulset:
+      enabled: true
+
+  compactor:
+    persistentVolume:
+      size: 3Gi
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+
+  distributor:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+
+  gateway:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+
+  ingester:
+    persistentVolume:
+      size: 3Gi
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+
+  minio:
+    enabled: false
+
+  overrides_exporter:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+
+  querier:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+
+  query_frontend:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+
+  ruler:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+
+  structuredConfig:
+    alertmanager_storage:
+      s3:
+        bucket_name: alert
+        access_key_id: ${MINIO_ACCESS_KEY_ID}
+        endpoint: minio.monitoring.svc:9000
+        secret_access_key: ${MINIO_SECRET_ACCESS_KEY}
+    blocks_storage:
+      backend: s3
+      s3:
+        bucket_name: blocks
+        access_key_id: ${MINIO_ACCESS_KEY_ID}
+        endpoint: minio.monitoring.svc:9000
+        secret_access_key: ${MINIO_SECRET_ACCESS_KEY}
+    ruler_storage:
+      s3:
+        bucket_name: ruler
+        access_key_id: ${MINIO_ACCESS_KEY_ID}
+        endpoint: minio.monitoring.svc:9000
+        secret_access_key: ${MINIO_SECRET_ACCESS_KEY}
