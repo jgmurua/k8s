@@ -49,7 +49,10 @@ jobs:
           --set server.persistentVolume.enabled=false \
           --set pushgateway.persistentVolume.enabled=false \
           --namespace monitoring 
-        helm upgrade --install mimir grafana/mimir-distributed -n monitoring -f monitoring-aks/values-mimir.yaml 
+        helm upgrade --install mimir grafana/mimir-distributed -n monitoring -f monitoring-aks/values-mimir.yaml
+        #delete statefulsets to avoid data loss
+        kubectl delete statefulset mimir-ingester-zone-a --cascade=false -n monitoring
+        kubectl delete statefulset mimir-ingester-zone-c --cascade=false -n monitoring
         helm upgrade --install loki grafana/loki-stack --namespace monitoring 
         helm upgrade --install tempo grafana/tempo-distributed --namespace monitoring \
           --set compactor.replicas=1 \
