@@ -61,9 +61,12 @@ jobs:
           --set querier.replicas=1 \
           --set queryFrontend.replicas=1 
         helm upgrade --install grafana grafana/grafana --namespace monitoring -f monitoring-aks/grafana-datasource.yaml 
-        #fix for avoid multiple replicas in multiple zones
-        kubectl delete statefulset mimir-ingester-zone-a --cascade=false -n monitoring
+        # fix for avoid multiple replicas in multiple zones
+        kubectl scale statefulset mimir-store-gateway-zone-a --replicas=0 -n monitoring
         kubectl scale statefulset mimir-store-gateway-zone-b --replicas=1 -n monitoring
-        kubectl delete statefulset mimir-ingester-zone-c --cascade=false -n monitoring
-        kubectl delete pod mimir-ingester-zone-a-0 -n monitoring
-        kubectl delete pod mimir-ingester-zone-c-0 -n monitoring
+        kubectl scale statefulset mimir-store-gateway-zone-0 --replicas=0 -n monitoring
+        kubectl scale statefulset mimir-ingester-zone-a --replicas=0 -n monitoring
+        kubectl scale statefulset mimir-ingester-zone-b --replicas=1 -n monitoring
+        kubectl scale statefulset mimir-ingester-zone-ca --replicas=0 -n monitoring
+
+        
