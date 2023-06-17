@@ -1,14 +1,11 @@
 # Imagen base
-FROM golang:1.16-alpine
+FROM golang:1.20 AS build-stage
 
 # Establecer el directorio de trabajo
 WORKDIR /app
 
 # Copiar el código fuente al contenedor
-COPY . .
-
-# Instalar la herramienta jq
-RUN apk --no-cache add jq
+COPY *.go ./
 
 # Obtener la dirección IP local y convertirla en un código de color
 RUN export BACKGROUND_COLOR=$(hostname -I | awk '{print $1}' | md5sum | awk '{print "#"substr($1, 0, 6)}')
@@ -23,7 +20,7 @@ ENV BACKGROUND_COLOR=$BACKGROUND_COLOR
 RUN go build -mod=vendor -o main .
 
 # Puerto expuesto por la aplicación
-EXPOSE 8080
+EXPOSE 80
 
 # Comando para ejecutar la aplicación
 CMD ["./main"]

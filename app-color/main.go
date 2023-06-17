@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
 	"os"
@@ -21,7 +20,7 @@ func main() {
 		renderTemplate(c, color)
 	})
 
-	router.Run(":8080")
+	router.Run(":80")
 }
 
 // Función para renderizar el template con el color
