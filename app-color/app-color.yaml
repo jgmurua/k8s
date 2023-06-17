@@ -75,9 +75,9 @@ metadata:
   name: go-server-ingress-affinity
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
-    appgw.ingress.kubernetes.io/cookie-based-affinity: "true"
+    appgw.ingress.kubernetes.io/cookie-based-affinity: "true" 
     appgw.ingress.kubernetes.io/connection-draining: "true"
-    appgw.ingress.kubernetes.io/connection-draining-timeout: "5"
+    appgw.ingress.kubernetes.io/connection-draining-timeout: "5" # drena coneccion rota
 spec:
   rules:
   - http:
