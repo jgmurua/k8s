@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-color-deployment
+  name: app-color-deployment-green
   labels:
     app: app-color
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: app-color
@@ -21,7 +21,35 @@ spec:
         - containerPort: 80
         resources:
           limits:
-            memory: "8Mi"
+            memory: "32Mi"
+        env:
+        - name: BACKGROUND_COLOR
+          value: "#64FE2E"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-color-deployment-red
+  labels:
+    app: app-color
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-color
+  template:
+    metadata:
+      labels:
+        app: app-color
+    spec:
+      containers:
+      - name: app-color
+        image: jgmurua/app-color:latest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "32Mi"
         env:
         - name: BACKGROUND_COLOR
           value: "#FF0000"
@@ -49,7 +77,7 @@ metadata:
     kubernetes.io/ingress.class: azure/application-gateway
     appgw.ingress.kubernetes.io/cookie-based-affinity: "true"
     appgw.ingress.kubernetes.io/connection-draining: "true"
-    appgw.ingress.kubernetes.io/connection-draining-timeout: "60"
+    appgw.ingress.kubernetes.io/connection-draining-timeout: "20"
 spec:
   rules:
   - http:
