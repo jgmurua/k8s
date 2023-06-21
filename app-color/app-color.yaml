@@ -82,7 +82,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /
+      - path: /color
         backend:
           service:
             name: app-color-service
