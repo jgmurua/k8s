@@ -1,0 +1,62 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: letschat
+  name: letschat
+  labels:
+    app: letschat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: letschat
+  template:
+    metadata:
+      labels:
+        app: letschat
+    spec:
+      containers:
+      - name: letschat
+        image: jgmurua/letschat
+        ports:
+        - containerPort: 8080
+        env:
+        - name: LCB_DATABASE_URI
+          value: "mongodb://10.42.0.187/letschat"
+# value: "mongodb://mongo.letschat.svc.cluster.local/letschat"
+        - name: LCB_AUTH_PROVIDERS
+          value: local
+        - name: LCB_AUTH_LOCAL_ENABLE_REGISTRATION
+          value: "true"
+        - name: LCB_FILES_ENABLE
+          value: "true"
+        - name: LCB_FILES_PROVIDER
+          value: local
+        - name: LCB_FILES_ALLOWED_TYPES
+          value: "image/jpeg,image/png,image/gif,image/bmp,image/webp,image/tiff,image/x-icon,image/svg+xml,application/pdf,application/zip,application/octet-stream,application/x-rar-compressed,application/x-tar,application/x-7z-compressed,application/x-bzip,application/x-bzip2,application/x-xz,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/plain,text/csv,text/html,text/xml,text/css,text/javascript,application/json,application/x-shockwave-flash,application/rtf,application/epub+zip,video/mp4,video/x-matroska,video/webm,video/quicktime,video/x-msvideo,video/x-ms-wmv,video/mpeg,audio/midi,audio/mpeg,audio/webm,audio/ogg,audio/wav,audio/x-m4a,audio/x-realaudio,audio/x-wav,audio/x-ms-wma,audio/vnd.rn-realaudio,audio/vnd.wave,audio/3gpp,audio/3gpp2,audio/3gpp,audio/3gpp2,audio/aac,audio/mp4,audio/opus,audio/x-aiff,audio/x-flac,audio/x-matroska,audio/x-ms-wax,audio/x-ms-wma,audio/x-pn-realaudio,audio/x-pn-realaudio-plugin,audio/x-wav,audio/xm"
+        resources:
+          requests:
+            memory: "10Mi"
+          limits:
+            memory: "300Mi"
+# add volume mount for persistent storage
+        volumeMounts:
+        - name: letschat-storage
+          mountPath: /usr/src/app/uploads
+      volumes:
+      - name: letschat-storage
+        persistentVolumeClaim:
+          claimName: letschat-pvc
+---
+# pvc for persistent storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: letschat
+  name: letschat-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: letschat
+  namespace: letschat
+spec:
+  type: NodePort
+  selector:
+      app: letschat
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30013
