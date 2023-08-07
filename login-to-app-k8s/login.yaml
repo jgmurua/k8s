@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-reverse-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-reverse-proxy
+  template:
+    metadata:
+      labels:
+        app: nginx-reverse-proxy
+    spec:
+      containers:
+        - name: nginx
+          image: jgmurua/nginx-reverse-proxy:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: USERNAME
+              value: "tu_usuario" # Cambia "tu_usuario" por el nombre de usuario que desees
+            - name: PASSWORD
+              value: "tu_contraseña" # Cambia "tu_contraseña" por la contraseña que desees
+            - name: PORT
+              value: "80" 
+            - name: PROXY_URL
+              value: "http://gin-gonic-page-service.default.svc:3300" # Cambia la URL por la dirección interna del servicio dentro de Kubernetes
+---
+# app a la que se accede a través del reverse proxy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gin-gonic-page-deployment
+  labels:
+    app: gin-gonic-page
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gin-gonic-page
+  template:
+    metadata:
+      labels:
+        app: gin-gonic-page
+    spec:
+      containers:
+      - name: gin-gonic-page
+        image: jgmurua/gin-gonic-page:latest
+        ports:
+        - containerPort: 3300
+        resources:
+          limits:
+            memory: "8Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gin-gonic-page-service
+  labels:
+    app: gin-gonic-page
+spec:
+  type: NodePort
+  selector:
+    app: gin-gonic-page
+  ports:
+    - protocol: TCP
+      port: 3300
+      targetPort: 3300
+---
+# reverse proxy
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-reverse-proxy-service
+  labels:
+    app: nginx-reverse-proxy
+spec:
+  type: NodePort
+  selector:
+    app: nginx-reverse-proxy
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30011
