@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php
+  template:
+    metadata:
+      labels:
+        app: php
+    spec:
+      containers:
+      - name: php
+        image: opencats/php-base:7.2-fpm-alpine
+        volumeMounts:
+        - name: opencats-data
+          mountPath: /var/www/public
+      volumes:
+      - name: opencats-data
+        persistentVolumeClaim:
+          claimName: opencats-data-pvc
+    

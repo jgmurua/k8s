@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opencats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opencats
+  template:
+    metadata:
+      labels:
+        app: opencats
+    spec:
+      containers:
+      - name: opencats
+        image: prooph/nginx:www
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_USER
+          value: "dev"
+        - name: MYSQL_PASSWORD
+          value: "dev"
+        - name: MYSQL_DATABASE
+          value: "cats"
+        volumeMounts:
+        - name: opencats-data
+          mountPath: /var/www/public
+      volumes:
+      - name: opencats-data
+        persistentVolumeClaim:
+          claimName: opencats-data-pvc
+  

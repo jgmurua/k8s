@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opencatsdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opencatsdb
+  template:
+    metadata:
+      labels:
+        app: opencatsdb
+    spec:
+      containers:
+      - name: opencatsdb
+        image: mariadb
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_USER
+          value: "dev"
+        - name: MYSQL_PASSWORD
+          value: "dev"
+        - name: MYSQL_DATABASE
+          value: "cats"
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        - name: mysql-initdb
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mysql-data-pvc
+      - name: mysql-initdb
+        configMap:
+          name: mysql-initdb-configmap
