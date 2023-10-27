@@ -1,0 +1,73 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-backup-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: mysql-backup-container
+          image: jgmurua/mysql-backup-container:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "3000Mi"
+              cpu: "2000m"
+          env:
+            - name: MYSQL_DB
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-backup-secret
+                  key: MYSQL_DB
+            - name: MYSQL_HOSTNAME_ORIGEN
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-backup-secret
+                  key: MYSQL_HOSTNAME_ORIGEN
+            - name: MYSQL_USERNAME_ORIGEN
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-backup-secret
+                  key: MYSQL_USERNAME_ORIGEN
+            - name: MYSQL_PASSWORD_ORIGEN
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-backup-secret
+                  key: MYSQL_PASSWORD_ORIGEN
+            - name: MYSQL_HOSTNAME_DESTINO
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-backup-secret
+                  key: MYSQL_HOSTNAME_DESTINO
+            - name: MYSQL_USERNAME_DESTINO
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-backup-secret
+                  key: MYSQL_USERNAME_DESTINO
+            - name: MYSQL_PASSWORD_DESTINO
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-backup-secret
+                  key: MYSQL_PASSWORD_DESTINO
+          volumeMounts:
+            - name: backup-volume
+              mountPath: /backup
+      restartPolicy: Never
+      volumes:
+        - name: backup-volume
+          persistentVolumeClaim:
+            claimName: backup-pvc
+  backoffLimit: 2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backup-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: gp2 # Para uso eventual en AWS
+
