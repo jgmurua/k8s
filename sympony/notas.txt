@@ -1,0 +1,37 @@
+
+
+#chequear requerimientos
+symfony check:requirements
+
+# crea carpeta del proyecto
+symfony new hola-symfony --version="7.0.*" --webapp
+
+#inicia el server
+symfony server:start
+
+# en localhost:8000 va a dar la pagina de bienvenida a sympony y se debera crear una pagina
+ctrl + c para parar el server
+
+se crea en nombre-proj/src/Controler/ el archivo HolaController.php
+
+<?php
+// src/Controller/HolaController.php
+namespace App\Controller;
+
+use Symfony\Component\HttpFoundation\Response; // <<< importante para dar respuesta
+use Symfony\Component\Routing\Annotation\Route; // <<< importante para direccionar as rutas
+
+class HolaController
+{
+    #[Route('/')]
+    public function hola(): Response
+    {
+        return new Response(
+            '<html><body>Hola</body></html>'
+        );
+    }
+}
+
+
+editar en .env APP_ENV=prod para hostear sin debug tools
+
